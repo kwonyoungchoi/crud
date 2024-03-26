@@ -1,10 +1,71 @@
 <!DOCTYPE html>
-<html lang="en">
+<!--en-한글브라우저에서 한글/영어 번역-->
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Bootstrap Example</title>
+    <meta charset="utf-8">
+    <!--반응형웹-->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!--스프링부트에 css 색상, 모양-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!--부트스트렙에 효과-->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 <body>
-
+<!--메뉴시작-->
+<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+    <div class="container-fluid"> <!--메뉴 방향-->
+        <ul class="navbar-nav">   <!--메뉴 구성-->
+            <li class="nav-item"> <!--메뉴 항목-->
+                <!--href 메핑선언-->
+                <!--href 반드시 /부터 시작 active 항상 활성화-->
+                <a class="nav-link active" href="#">회사명</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/board/insert">삽입</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/board/list">목록</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+<!--메뉴끝-->
+<!--목록-->
+<!--목록끝-->
+<!--삽입 폼-->
+<!--sm-스마트폰, md-태블릿, lg-pc, xl-4k-->
+<div class="row"><!--자리잡기, 행->12칸 구성-->
+    <div class="col-lg-4 col-md-2">여백</div>
+    <div class="col-lg-4 col-md-8"><!--작업-->
+        <h2>게시글 등록</h2>
+        <form th:action="@{/board/insert}" th:method="post">
+            <!--각 div에 사용할 DTO에 변수명으로 name을 선언-->
+            <!--name명과 DTO에 변수명이 동일하면 Controller 자동으로 연동-->
+            <!--변수명이 다르면 Controller @Requestparam으로 수동으로 연동-->
+            <div class="mb-3 mt-3"> <!--for 생략가능-->
+                <label class="form-label">제목</label>
+                <input type="text" class="form-control" name="title">
+            </div>
+            <div class="mb-3">
+                <label class="form-label">내용</label>
+                <input type="text" class="form-control" name="content">
+            </div>
+            <div class="mb-3">
+                <label class="form-label">작성자</label>
+                <input type="text" class="form-control" name="writer">
+            </div>
+            <button type="submit" class="btn btn-primary">등록</button>
+        </form>
+    </div>
+    <div class="col-lg-4 col-md-2">여백</div>
+</div>
+<!--삽입끝-->
+<!--검색-->
+<!--검색끝-->
+<!--페이지번호-->
+<!--페이지번호끝-->
+<!--modal-->
+<!--javascript-->
 </body>
 </html>
