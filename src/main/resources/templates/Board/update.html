@@ -42,20 +42,20 @@
         <form th:action="@{/board/insert}" th:method="post" th:object="${boardDTO}">
             <!--삽입폼과 수정폼은 값의 존재(value="" ,text), 기본키가 존재-->
             <!--기본키 hidden 숨김처리, readonly 출력만-->
-            <input type="hidden" name="id" th:field="*{boardDTO.id}"> <!-- 수정할 대상-->
+            <input type="hidden" name="id" th:field="*{id}"> <!-- 수정할 대상-->
             <div class="mb-3 mt-3"> <!--for 생략가능-->
                 <label class="form-label">제목</label>
-                <input type="text" class="form-control" name="title" th:field="*{boardDTO.title}">
+                <input type="text" class="form-control" name="title" th:field="*{title}">
                 <p th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></p>
             </div>
             <div class="mb-3">
                 <label class="form-label">내용</label>
-                <input type="text" class="form-control" name="content" th:field="*{boardDTO.content}">
+                <input type="text" class="form-control" name="content" th:field="*{content}">
                 <p th:if="${#fields.hasErrors('content')}" th:errors="*{content}"></p>
             </div>
             <div class="mb-3">
                 <label class="form-label">작성자</label>
-                <input type="text" class="form-control" name="writer" th:field="*{boardDTO.writer}">
+                <input type="text" class="form-control" name="writer" th:field="*{writer}">
                 <p th:if="${#fields.hasErrors('writer')}" th:errors="*{writer}"></p>
             </div>
             <button type="submit" class="btn btn-primary">등록</button>

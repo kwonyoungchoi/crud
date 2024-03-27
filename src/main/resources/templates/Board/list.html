@@ -42,8 +42,8 @@
             <th>번호</th> <!--칸-->
             <th>제목</th>
             <th>작성자</th>
+            <th>수정시간</th>
             <th>수정일</th>
-            <th>작업</th>
         </tr>
         </thead>
         <tbody><!--보고싶은 내용 1행만 작업, th=td 갯수 동일하게-->
@@ -58,7 +58,8 @@
                 <a th:text="${data.title}" th:href="@{'/board/'+ ${data.id}}"></a>
             </td> <!-상세페이지-->
             <td th:text="${data.writer}"></td>
-            <td th:text="${data.modDate}"></td>
+            <td th:text="${@dateUtil.formatModDate(data.modDate)}"></td>
+            <td th:text="${#temporals.format(data.modDate, 'yyyy-MM-dd')}"></td>
             <td><a th:href="@{'/board/update/'+ ${data.id}}">수정</a>
                 /<a th:href="@{'/board/delete/' + ${data.id}}">삭제</a></td>
             <!--페이지연결 form, a, button-->
@@ -69,8 +70,68 @@
 </div>
 <!--목록끝-->
 <!--검색-->
+<div class="row">
+    <div class="col-lg-3"></div>
+    <div class="col-lg-6"> <!--검색 추가-->
+        <form th:action="@{/board/list}" method="get">
+            <div class="input-group mb-3">
+                <select class="form-control" name="type"> <!--변수명 name-->
+                    <option value="">검색메뉴선택</option>                   <!--value=값, 전체조회-->
+                    <option value="s">제목</option>               <!--제목으로 조회-->
+                    <option value="c">내용</option>               <!--내용으로 조회-->
+                    <option value="w">작성자</option>              <!--작성자로 조회-->
+                    <option value="sc">제목+내용</option>          <!--제목,내용으로 조회-->
+                    <option value="scw">제목+내용+작성자</option>   <!--제목, 내용, 작성자로 조회-->
+                </select>
+                <input type="text" class="form-control" name="search" placeholder="검색">
+                <button type="submit" class="btn btn-success" >검색</button>
+            </div>
+        </form>
+    </div>
+    <div class="col-lg-3"></div>
+</div>
 <!--검색끝-->
 <!--페이지번호-->
+
+<!--
+pageinfo.put("startPage", startPage);       //[1].... , [<<]
+pageinfo.put("endPage", endPage);           //....[10]
+pageinfo.put("prevPage", prevPage);         //[<]
+pageinfo.put("currentPage", currentPage);   //[3]
+pageinfo.put("nextPage", nextPage);         //[>]
+pageinfo.put("lastPage", lastPage);         //[>>]
+-->
+
+<ul class="pagination justify-content-center" >
+    <!--현재 1페이지이면 출력하지 않는다.-->
+    <li class="page-item" th:unless="${startPage==1}">
+        <a class="page-link" th:href="@{/board/list(page=1)}"><<</a>
+    </li>
+    <!-- 앞페이지 이동(1페이지면 이동할 앞페이지가 존재하지 않는다..)-->
+    <li class="page-item" th:unless="${currentPage==1}">
+        <a class="page-link" th:href="@{/board/list(page=${prevPage})}"><</a>
+    </li>
+    <!--페이지번호를 출력하는 부분, 반복문을 이용해서 지정된 개수만큼 출력-->
+    <!--일반 for문 number.sequence(순차반복)(시작, 끝값, 증가값)-->
+    <span th:each="page:${#numbers.sequence(startPage, endPage, 1)}">
+        <!--현재페이지가 아니면 비활성 페이지번호를 출력-->
+        <li class="page-item" th:unless="${page==currentPage}"> <!--화면에 출력할 페이지번호-->
+        <a class="page-link" th:href="@{/board/list(page=${page})}">[[${page}]]</a>
+        </li>
+        <!--현재페이지가 맞으면 활성화 페이지번호를 출력-->
+        <li class="page-item active" th:if="${page==currentPage}"> <!--현재 페이지 번호-->
+        <a class="page-link" th:href="@{/board/list(page=${page})}">[[${page}]]</a>
+        </li>
+    </span>
+    <!-- 뒤페이지이동(현재 페이지가 마지막이면 다음페이지가 없음-->
+    <li class="page-item" th:unless="${currentPage==lastPage}">
+        <a class="page-link" th:href="@{/board/list(page=${nextPage})}">></a>
+    </li>
+    <!--화면에 마지막페이지번호와 전체페이지번호가 같으면-->
+    <li class="page-item" th:unless="${endPage==lastPage}">
+        <a class="page-link" th:href="@{/board/list(page=${lastPage})}">>></a>
+    </li>
+</ul>
 <!--페이지번호끝-->
 <!--modal-->
 <!--javascript-->

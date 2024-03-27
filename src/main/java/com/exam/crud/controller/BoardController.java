@@ -2,18 +2,20 @@ package com.exam.crud.controller;
 
 import com.exam.crud.dto.BoardDTO;
 import com.exam.crud.service.BoardService;
+import com.exam.crud.service.PageService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.util.Map;
+
 
 //제어를 위한 클래스
 @Controller
@@ -115,13 +117,22 @@ public class BoardController {
     
     //전체조회(R)
     @GetMapping("/board/list")
-    public String listForm(Model model) {
+    //@PageableDefault = View에서 페이지 정보가 전달되지 않으면 기본 1페이지로 사용
+    //검색어 추가(type=대상, seacrch=검색어)
+    //@RequestParam은 ? 뒤에 변수로 보낸 값을 처리(value="보낸변수", defaultValue="변수가 없을 때 대체")
+    public String listForm(@PageableDefault(page=1) Pageable pageable,
+                           @RequestParam(value="type", defaultValue="")String type,
+                           @RequestParam(value="search", defaultValue="")String search, Model model) {
 
+
+        Page<BoardDTO> boardDTOS = boardService.list(pageable, type, search);
+
+        //추가로 페이지정보도 view에 전달(하단에 출력할 정보를 가공)
+        Map<String, Integer> pageinfo = PageService.pagination(boardDTOS);
+        //addAllAttributes = 여러개의 변수를 한번에 전달할 때
+        model.addAllAttributes(pageinfo);
         //서비스 처리(전체조회)
-        List<BoardDTO> boardDTOS = boardService.list();
-
         model.addAttribute("list", boardDTOS);
-
         return "/board/list";
     }
     

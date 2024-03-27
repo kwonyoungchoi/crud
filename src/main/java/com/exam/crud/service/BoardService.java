@@ -8,6 +8,11 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.internal.bytebuddy.asm.Advice;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
@@ -80,13 +85,40 @@ public class BoardService {
     }
 
     //전체조회 List, pageable
-    public List<BoardDTO> list() {
-        // 전체조회
-        List<BoardEntity> boardEntities = boardRepository.findAll();
+    public Page<BoardDTO> list(Pageable page, String type, String search) {
+        //페이지정보를 읽기위한 정렬
+        int currentPage = page.getPageNumber()-1; // 데이터베이스 페이지번호 변경
+        int pageLimit=5; //한화면에 출력할 데이터갯수
+
+        //페이지 처리를 위한 정렬
+        //PageRequest.of페이지요청(찾을페이지, 가져올 개수, 정렬(정렬형식Desc(내림차순),ASC(오름차순)
+        Pageable pageable = PageRequest.of(currentPage, pageLimit, Sort.by(Sort.Direction.DESC, "id"));
+
+        Page<BoardEntity> boardEntities;
+
+        //검색을 추가
+        // 문자비교는 변수.equals("문자")
+        if(type.equals("s") && search != null) { //제목을 선택하고 검색어가 있으면
+            boardEntities = boardRepository.findByTitleContaining(search, pageable);
+        }else if (type.equals("c") && search != null) { // 내용을 선택하고 검색어가 있으면
+            boardEntities = boardRepository.findByContentContaining(search, pageable);
+        }else if (type.equals("w") && search != null) { // 작성자를 선택하고 검색어가 있으면
+            boardEntities = boardRepository.findByWriterContaining(search, pageable);
+        }else if (type.equals("sc") && search != null) { // 제목+내용을 선택하고 검색어가 있으면
+            boardEntities = boardRepository.findByTitleContainingOrContentContaining(search, pageable);
+        }else if (type.equals("scw") && search != null) { // 제목+내용+작성자를 선택하고 검색어가 있으면
+            boardEntities = boardRepository.findByTitleContainingOrContentContainingOrWriterContaining(search, pageable);
+        }else {
+            // 전체조회
+            boardEntities = boardRepository.findAll(pageable);
+
+        }
         // 변환
         //Arrays.asList : List의 내용을 개별로 읽어서 변환 후 배열로 저장
-        List<BoardDTO> boardDTOS = Arrays.asList(modelMapper.map(boardEntities,
-                BoardDTO[].class));
+
+        //ForEach(data:entity)...
+        //entity(entity,page) ->data(임시변수)->data값을 modelMapper로 변환
+        Page<BoardDTO> boardDTOS = boardEntities.map(data->modelMapper.map(data, BoardDTO.class));
         return boardDTOS;
     }
 }
