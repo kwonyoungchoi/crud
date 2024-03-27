@@ -14,9 +14,10 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 // 주입 - 클래스를 생성
 // 생성 - 메소드를 자동으로 생성
 
-@SpringBootApplication
+
 // 자동으로 날짜를 생성하는 어노테이션
 @EnableJpaAuditing
+@SpringBootApplication
 public class CrudApplication {
 
     public static void main(String[] args) {

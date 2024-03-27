@@ -1,21 +1,30 @@
 package com.exam.crud.entity;
 
+
+import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @MappedSuperclass
+@Getter @Setter @ToString
 //이벤트 발생시 처리(날짜/시간)
-@EntityListeners(AutoCloseable.class)
+@EntityListeners(AuditingEntityListener.class)
 //abstract를 직접적으로 사용불가능 , extends를 이용해야만 사용가능
 public abstract class BaseEntity {
 
     //자동으로 등록처리시 날짜처리 메소드를 생성해서 결과값을 주입
     @CreatedDate
     private LocalDateTime regDate; //생성시 등록할 날짜/시간
+
     @LastModifiedDate
     private LocalDateTime modDate; //수정시 등록할 날짜/시간
 

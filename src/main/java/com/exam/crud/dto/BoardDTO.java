@@ -2,11 +2,9 @@ package com.exam.crud.dto;
 
 
 
-import jakarta.persistence.*;
+
 import lombok.*;
-import org.springframework.boot.autoconfigure.AutoConfiguration;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
+
 
 import java.time.LocalDateTime;
 
@@ -26,6 +24,7 @@ public class BoardDTO {
     private String content;
     private String writer;
     private LocalDateTime modDate;
+    private LocalDateTime regDate;
     //Entity에 없는 변수 선언 가능(주문관리->금액처리)
 
     //변수를 처리할 필요한 메소드를 작성

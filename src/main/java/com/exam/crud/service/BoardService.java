@@ -1,14 +1,17 @@
 package com.exam.crud.service;
 
 import com.exam.crud.dto.BoardDTO;
+import com.exam.crud.entity.BaseEntity;
 import com.exam.crud.entity.BoardEntity;
 import com.exam.crud.repository.BoardRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -19,6 +22,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 //데이터베이스 처리를 모아서 처리(일괄처리)
 @Transactional
+@Log4j2
 public class BoardService {
     //사용할 저장소 지정
     private final BoardRepository boardRepository;
@@ -35,6 +39,9 @@ public class BoardService {
         //데이터베이스 처리를 위한 변환 DTO -> Entity (boardDTO boardDTO)
         boardRepository.save(boardEntity);  //질의어
         //결과를 Controller에 전달하기 위해 Entity->DTO (public BoardDTO)
+
+
+
 
     }
 
@@ -53,6 +60,7 @@ public class BoardService {
             //저장확인가능
             boardRepository.save(boardEntity);
         }
+
     }
 
     public void delete(Long id) {

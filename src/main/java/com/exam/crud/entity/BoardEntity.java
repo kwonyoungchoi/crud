@@ -39,10 +39,11 @@ import java.time.LocalDateTime;
 public class BoardEntity extends BaseEntity {
 
     //기본키, 유일한 키 - 중복X
-    @Id
+
     //생성전략
     //문자변수일 때 GenerationType.IDNETITY - 중복되지 않도록 처리
     //숫자변수일 때 GenerationType.SEQUENCE - 숫자를 증가하면서 처리
+    @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE,
     generator = "board_seq")
     private long id;
@@ -51,6 +52,7 @@ public class BoardEntity extends BaseEntity {
     private String title;
     private String content;
     private String writer;
+
     
     //변수를 처리할 필요한 메소드를 작성
     //Entity<->DTO간의 변환하는 메소드

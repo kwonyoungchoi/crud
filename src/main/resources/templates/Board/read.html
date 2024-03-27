@@ -37,17 +37,17 @@
 <!--삽입 폼-->
 <!--sm-스마트폰, md-태블릿, lg-pc, xl-4k-->
 <div class="row"><!--자리잡기, 행->12칸 구성-->
-    <div class="col-lg-4 col-md-2">여백</div>
+    <div class="col-lg-4 col-md-2"></div>
     <div class="col-lg-4 col-md-8"><!--작업-->
 
 
         <div class="card">
             <div class="card-header"><h2>게시글 상세보기</h2></div>
             <div class="card-body"><!--본문 출력, p태그-->
-                <p>제목 : <span th:text="${boardDTO.title}">연습제목.</span></p>
-                <p>내용 : <span th:text="${boardDTO.content}">연습내용.</span></p>
-                <p>작성자 : <span th:text="${boardDTO.writer}">홍길동</span></p>
-                <p>수정일 : <span th:text="${boardDTO.modDate}">2024-01-01</span></p>
+                <p>제목 : <span th:text="${boardDTO.title}"></span></p>
+                <p>내용 : <span th:text="${boardDTO.content}">.</span></p>
+                <p>작성자 : <span th:text="${boardDTO.writer}"></span></p>
+                <p>수정일 : <span th:text="${boardDTO.modDate}"></span></p>
             </div>
             <div class="card-footer"><!--다음작업-->
                 <a th:href="@{'/board/update/'+ ${boardDTO.id}}">수정</a>
@@ -58,7 +58,7 @@
     </div>
 </div>
 
-    <div class="col-lg-4 col-md-2">여백</div>
+    <div class="col-lg-4 col-md-2"></div>
 <!--삽입끝-->
 
 <!--상세보기끝-->
