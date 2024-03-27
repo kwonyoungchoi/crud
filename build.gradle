@@ -1,7 +1,7 @@
 plugins {
     id 'java'
     id 'war'
-    id 'org.springframework.boot' version '3.2.4'
+    id 'org.springframework.boot' version '3.2.3'
     id 'io.spring.dependency-management' version '1.1.4'
 }
 
@@ -46,7 +46,14 @@ dependencies {
     // modelMapper(DTO<-> Entity간에 변환)
     // 배포사이트:사용할 라이브러리:버전(생략시 최신버전)
     // 수동으로 등록한 내용은 수동으로 셋팅
+
+    // thymeleaf
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+    implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect'
+
     implementation 'org.modelmapper:modelmapper:3.1.1'
+    //검증
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
 }
 
 tasks.named('test') {

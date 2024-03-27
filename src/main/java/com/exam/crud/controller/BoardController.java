@@ -3,9 +3,11 @@ package com.exam.crud.controller;
 import com.exam.crud.dto.BoardDTO;
 import com.exam.crud.service.BoardService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,12 +15,17 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.List;
 
+//제어를 위한 클래스
 @Controller
 //Controller>Service>Repository
 @RequiredArgsConstructor
+//콘솔에 로그형식 내용을 출력
+@Log4j2
 public class BoardController {
     //서비스를 주입
     private final BoardService boardService;
+    
+    
 
     //@Autowired는 private 클래스명으로 선언시 자동주입
     //@RequiredAresConstructor는 private final 클래스명으로 선언시 자동주입
@@ -27,15 +34,42 @@ public class BoardController {
     //삽입(C) ~Form(view로 이동), ~Proc(Service로 처리)
     //Service처리한 페이지 redirect로 이동
 
+
+    //Model은 Controller->View에 값을 전달
+    //주석 사용법
+    //TODO : 해야할 작업을 기록
+    //FixMe : 해결하지 못한 문제점 기록
+    
+    //TODO : 1. 검증
+    //TODO : 2. 페이지
+    //TODO : 3. 검색
+    //FixMe : 검증처리가 안됨
+    
     @GetMapping("/board/insert")
-    public String insertForm(){
+    public String insertForm(Model model){
+        log.info("일반적으로 처리할 메세지");
+        log.warn("경고나 주의 메세지");
+        log.error("문제발생 메세지");
+
+        //"boardDTO" --> view ${boardDTO}
+        model.addAttribute("boardDTO", new BoardDTO());
+
         return "board/insert"; //html파일로 이동
     }
     //입력한 내용을 DTO로 받는다.
     //form(input태그 name)과 DTO(변수명) 매치 값을 전달
     //@ModelAttribute 매칭(생략가능)
     @PostMapping("/board/insert")
-    public String insertProc(@ModelAttribute BoardDTO boardDTO){
+    //1. @Validated 대상 : 값이 들어오면 DTO를 이용해서 검증
+    //2. BindingResult : DTO에서 검증한 결과를 전달
+    public String insertProc(@ModelAttribute @Validated BoardDTO boardDTO,
+                             BindingResult bindingResult){
+        //서비스 처리 전(데이터베이스 처리 오류를 방지하는게 목적)
+        if(bindingResult.hasErrors()) {
+            // 검증 결과에서 오류가 발생했을면
+            return "board/insert"; //입력한 폼으로 다시 이동
+        }
+
         //서비스 처리
         boardService.insert(boardDTO);
         return "redirect:/board/list"; // 이동할 맵핑명
@@ -58,10 +92,14 @@ public class BoardController {
     
     // 수정할 내용을 boardDTO가 받아서 데이터베이스에 수정처리
     @PostMapping("/board/update")
-    public String updateProc(BoardDTO boardDTO) {
+    public String updateProc(@Validated BoardDTO boardDTO,
+                             BindingResult bindingResult,
+                             Model model) {
+        if (bindingResult.hasErrors()){
+            return "/board/update";
+        }
         // 서비스 처리(수정)
         boardService.update(boardDTO);
-
         return "redirect:/board/list";
     }
 

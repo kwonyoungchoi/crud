@@ -39,21 +39,28 @@
     <div class="col-lg-4 col-md-2">여백</div>
     <div class="col-lg-4 col-md-8"><!--작업-->
         <h2>게시글 등록</h2>
-        <form th:action="@{/board/insert}" th:method="post">
+        <!--Form에는 변수를 object를 사용해서 쉽게 이용(받아온 변수명으로)-->
+        <!--field는 세부변수명만 사용-->
+        <form th:action="@{/board/insert}" th:method="post" th:object="${boardDTO}">
             <!--각 div에 사용할 DTO에 변수명으로 name을 선언-->
             <!--name명과 DTO에 변수명이 동일하면 Controller 자동으로 연동-->
             <!--변수명이 다르면 Controller @Requestparam으로 수동으로 연동-->
-            <div class="mb-3 mt-3"> <!--for 생략가능-->
+            <div class="mb-3 mt-3" > <!--for 생략가능-->
                 <label class="form-label">제목</label>
-                <input type="text" class="form-control" name="title">
+                <input type="text" class="form-control" name="title" th:field="*{title}">
+                <p th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></p>
             </div>
             <div class="mb-3">
                 <label class="form-label">내용</label>
-                <input type="text" class="form-control" name="content">
+                <input type="text" class="form-control" name="content" th:field="*{content}">
+                <p th:if="${#fields.hasErrors('content')}" th:errors="*{content}"></p>
             </div>
             <div class="mb-3">
                 <label class="form-label">작성자</label>
-                <input type="text" class="form-control" name="writer">
+                <input type="text" class="form-control" name="writer" th:field="*{writer}">
+                <p th:if="${#fields.hasErrors('writer')}" th:errors="*{writer}"></p>
+                <!--오류메세지 작업-->
+
             </div>
             <button type="submit" class="btn btn-primary">등록</button>
         </form>

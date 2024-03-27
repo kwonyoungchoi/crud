@@ -3,6 +3,7 @@ package com.exam.crud.dto;
 
 
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
 
@@ -20,8 +21,12 @@ public class BoardDTO {
 
     private long id;
     //게시판 제목, 내용, 작성자, (생성일, 수정일)-이미생성
+    //@검증종류(message = "오류메세지")
+    @NotBlank(message = "제목은 생략할 수 없습니다.")
     private String title;
+    @NotBlank(message = "내용은 생략할 수 없습니다.")
     private String content;
+    @NotBlank(message = "작성자는 생략할 수 없습니다.")
     private String writer;
     private LocalDateTime modDate;
     private LocalDateTime regDate;
